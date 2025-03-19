@@ -36,6 +36,9 @@ export interface MidsceneYamlFlowItemAIAction {
   aiAction?: string;
   aiActionProgressTips?: string[];
 }
+export interface MidsceneYamlFlowItemManualAction {
+  manualAction: [];
+}
 
 export interface MidsceneYamlFlowItemAIAssert {
   aiAssert: string;
@@ -57,6 +60,7 @@ export interface MidsceneYamlFlowItemSleep {
 
 export type MidsceneYamlFlowItem =
   | MidsceneYamlFlowItemAIAction
+  | MidsceneYamlFlowItemManualAction
   | MidsceneYamlFlowItemAIAssert
   | MidsceneYamlFlowItemAIQuery
   | MidsceneYamlFlowItemAIWaitFor

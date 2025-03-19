@@ -9,6 +9,7 @@ import type {
   MidsceneYamlFlowItemAIAssert,
   MidsceneYamlFlowItemAIQuery,
   MidsceneYamlFlowItemAIWaitFor,
+  MidsceneYamlFlowItemManualAction,
   MidsceneYamlFlowItemSleep,
   MidsceneYamlScript,
   MidsceneYamlScriptEnv,
@@ -111,6 +112,15 @@ export class ScriptPlayer {
           'prompt for aiAction must be a string',
         );
         await agent.aiAction(prompt);
+      } else if ((flowItem as MidsceneYamlFlowItemManualAction).manualAction) {
+        const actionTask = flowItem as MidsceneYamlFlowItemManualAction;
+        const prompt = actionTask.manualAction;
+        // assert(prompt, 'missing prompt for ai (aiAction)');
+        // assert(
+        //   typeof prompt === 'string',
+        //   'prompt for aiAction must be a string',
+        // );
+        await agent.manualAction(prompt);
       } else if ((flowItem as MidsceneYamlFlowItemAIAssert).aiAssert) {
         const assertTask = flowItem as MidsceneYamlFlowItemAIAssert;
         const prompt = assertTask.aiAssert;

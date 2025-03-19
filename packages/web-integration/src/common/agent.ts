@@ -196,6 +196,18 @@ export class PageAgent<PageType extends WebPage = WebPage> {
       }
     }
   }
+  async manualAction(manualActions: []) {
+    const { executor } = await this.taskExecutor.mAction(manualActions, {
+      onTaskStart: this.callbackOnTaskStartTip.bind(this),
+    });
+    this.appendExecutionDump(executor.dump());
+    this.writeOutActionDumps();
+
+    if (executor.isInErrorState()) {
+      const errorTask = executor.latestErrorTask();
+      throw new Error(`${errorTask?.error}\n${errorTask?.errorStack}`);
+    }
+  }
 
   async aiQuery(demand: any) {
     const { output, executor } = await this.taskExecutor.query(demand, {

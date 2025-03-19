@@ -244,6 +244,18 @@ export interface PlanningLocateParam {
   prompt: string;
 }
 
+/**
+ * manual planning
+ *
+ */
+
+export interface ManualPlanningLocateParam {
+  id?: string;
+  class?: string;
+  content?: string;
+  prompt?: string;
+}
+
 export interface PlanningAction<ParamType = any> {
   thought?: string;
   type:
@@ -262,6 +274,26 @@ export interface PlanningAction<ParamType = any> {
     | 'Finished';
   param: ParamType;
   locate: PlanningLocateParam | null;
+}
+
+export interface ManualPlanningAction<ParamType = any> {
+  thought?: string;
+  type:
+    | 'Locate'
+    | 'Tap'
+    | 'Drag'
+    | 'Hover'
+    | 'Input'
+    | 'KeyboardPress'
+    | 'Scroll'
+    | 'Error'
+    | 'ExpectedFalsyCondition'
+    | 'Assert'
+    | 'AssertWithoutThrow'
+    | 'Sleep'
+    | 'Finished';
+  param: ParamType;
+  locate: ManualPlanningLocateParam | null;
 }
 
 export interface PlanningAIResponse {
@@ -362,7 +394,7 @@ export interface ExecutionTaskApply<
   subType?: string;
   param?: TaskParam;
   thought?: string;
-  locate: PlanningLocateParam | null;
+  locate: PlanningLocateParam | ManualPlanningLocateParam | null;
   quickAnswer?: AISingleElementResponse | null;
   pageContext?: UIContext;
   executor: (
@@ -434,6 +466,13 @@ export type ExecutionTaskInsightLocateApply = ExecutionTaskApply<
   ExecutionTaskInsightDumpLog
 >;
 
+export type ExecutionManualTaskInsightLocateApply = ExecutionTaskApply<
+  'Insight',
+  ManualPlanningLocateParam,
+  ExecutionTaskInsightLocateOutput,
+  ExecutionTaskInsightDumpLog
+>;
+
 export type ExecutionTaskInsightLocate =
   ExecutionTask<ExecutionTaskInsightLocateApply>;
 
@@ -488,10 +527,15 @@ export type ExecutionTaskActionApply<ActionParam = any> = ExecutionTaskApply<
 export type ExecutionTaskAction = ExecutionTask<ExecutionTaskActionApply>;
 
 /*
-task - planning
+task - manual planning
 */
 
-export type ExecutionTaskPlanningApply = ExecutionTaskApply<
+export type ExecutionTaskPlanningApply = ExecutionTaskApply<'Planning'>;
+
+/*
+task - planning
+*/
+export type ExecutionManualTaskPlanningApply = ExecutionTaskApply<
   'Planning',
   {
     userInstruction: string;
